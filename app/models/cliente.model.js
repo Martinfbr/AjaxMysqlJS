@@ -68,3 +68,30 @@ Cliente.updateById = (id, cliente, result) => {
         }
         );
 };
+Cliente.remove = (id, result)=>{ 
+    sql.query("DELETE FROM clientes WHERE id = ?", id, (err, res)=>{
+        if(err) { 
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        if(res.affectedRows == 0){
+            result({ kind: "not_found" }, null );
+            return;
+        }
+        console.log("cliente borrado con el id: ", id);
+        result(null,res);
+    });
+};
+Cliente.removeAll = result => { 
+    sql.query("DELETE FROM clientes", (err,res) =>{
+        if(err){
+            console.log("erro: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(`borrados ${res.affectedRows} clientes`);
+        result(null, res);
+    });
+};
+module.exports = Cliente;
